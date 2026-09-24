@@ -1,0 +1,43 @@
+{
+  "name": "net-zero",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@12.6.0",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "dev": "vp dev --port 3000",
+    "generate-routes": "tsr generate",
+    "build": "vp build",
+    "preview": "vp preview"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.8.0",
+    "@stylexjs/stylex": "^0.19.1",
+    "@tanstack/react-devtools": "latest",
+    "@tanstack/react-router": "latest",
+    "@tanstack/react-router-devtools": "latest",
+    "@tanstack/react-start": "latest",
+    "@unpic/react": "^1.0.2",
+    "ky": "^2.1.0",
+    "lucide-react": "^1.47.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@stylexjs/unplugin": "^0.19.1",
+    "@tanstack/devtools-vite": "latest",
+    "@tanstack/router-cli": "^1.132.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "oxfmt": "0.70.0",
+    "oxlint": "1.85.0",
+    "typescript": "^6.0.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0-rc.0",
+    "vite-plus": "1.0.0-rc.0"
+  }
+}
