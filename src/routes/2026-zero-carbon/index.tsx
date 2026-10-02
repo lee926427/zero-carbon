@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ResilientTaiwan2026Page, fetchResilientTaiwanData } from "@/page/2026-zero-carbon";
+import { ResilientTaiwan2026Layout, fetchResilientTaiwanData } from "@/page/2026-zero-carbon";
 
 export const Route = createFileRoute("/2026-zero-carbon/")({
   headers: () => {
@@ -52,5 +52,5 @@ export const Route = createFileRoute("/2026-zero-carbon/")({
       ],
     };
   },
-  component: ResilientTaiwan2026Page,
+  component: ResilientTaiwan2026Layout,
 });

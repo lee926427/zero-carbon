@@ -48,8 +48,36 @@ export const metadataSchema = z.object({
 });
 export type Metadata = z.infer<typeof metadataSchema>;
 
+export const relatedPostImageSizesSchema = z.object({
+  original: z.string(),
+  w2400: z.string(),
+  w1600: z.string(),
+  w1200: z.string(),
+  w800: z.string(),
+  w480: z.string(),
+});
+export type RelatedPostImageSizes = z.infer<typeof relatedPostImageSizesSchema>;
+
+export const relatedPostHeroImageSchema = z.object({
+  resizedWebp: relatedPostImageSizesSchema,
+  resized: relatedPostImageSizesSchema,
+});
+export type RelatedPostHeroImage = z.infer<typeof relatedPostHeroImageSchema>;
+
+export const relatedPostSchema = z.object({
+  id: z.string(),
+  slug: z.string(),
+  title: z.string(),
+  publishedDate: z.string(),
+  updatedAt: z.string(),
+  state: z.string(),
+  heroImage: relatedPostHeroImageSchema,
+  url: z.string(),
+});
+export type RelatedPost = z.infer<typeof relatedPostSchema>;
+
 export const resilientTaiwanDataSchema = z.object({
   metadata: metadataSchema,
-  relatedPost: z.array(z.unknown()),
+  relatedPost: z.array(relatedPostSchema),
 });
 export type ResilientTaiwanData = z.infer<typeof resilientTaiwanDataSchema>;

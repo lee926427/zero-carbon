@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { fontSize, fontWeight, lineHeight, tracking } from "./tokens.stylex";
+import { media } from "./constants.stylex";
 
 export const typography = stylex.create({
   // 論壇簡介 heading: 32px/1.8, bold
@@ -60,5 +61,12 @@ export const typography = stylex.create({
     fontSize: fontSize.sm,
     fontWeight: fontWeight.bold,
     lineHeight: lineHeight.lg,
+  },
+  registrationLink: {
+    fontSize: {
+      default: fontSize.base,
+      [media.desktop]: fontSize.lg,
+    },
+    fontWeight: fontWeight.bold,
   },
 });

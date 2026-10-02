@@ -8,5 +8,8 @@ export {
   type Speaker,
   type PartnerItem,
   type PageInfoField,
+  type RelatedPost,
+  type RelatedPostHeroImage,
+  type RelatedPostImageSizes,
 } from "./schema/resilientTaiwanDataSchema";
-export { ResilientTaiwan2026Page } from "./ui/page";
+export { ResilientTaiwan2026Layout } from "./ui/layout";

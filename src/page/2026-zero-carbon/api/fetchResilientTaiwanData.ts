@@ -1,4 +1,4 @@
-import { bucket } from "#/shared/lib/apis";
+import { bucket } from "@/shared/lib/apis";
 
 import { NetworkError, SchemaValidationError } from "ky";
 import { resilientTaiwanDataSchema } from "../schema/resilientTaiwanDataSchema";

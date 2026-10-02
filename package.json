@@ -2,10 +2,6 @@
   "name": "net-zero",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@12.6.0",
-  "imports": {
-    "#/*": "./src/*"
-  },
   "scripts": {
     "dev": "vp dev --port 3000",
     "generate-routes": "tsr generate",
@@ -43,5 +39,6 @@
     "typescript": "^6.0.2",
     "vite": "npm:@voidzero-dev/vite-plus-core@1.0.0-rc.0",
     "vite-plus": "1.0.0-rc.0"
-  }
+  },
+  "packageManager": "pnpm@12.6.0"
 }
