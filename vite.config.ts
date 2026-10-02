@@ -80,7 +80,11 @@ const config = defineConfig({
       },
     }),
     devtools(),
-    tanstackStart(),
+    tanstackStart({
+      prerender: {
+        enabled: true,
+      },
+    }),
     viteReact(),
   ],
 });

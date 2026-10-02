@@ -1,0 +1,70 @@
+steps:
+  # Registry layer caching on Cloud Build needs docker buildx with the
+  # docker-container driver — the default docker driver can't export/import
+  # cache to a registry, and it can't span multi-stage build layers even if
+  # it could (only the final stage's layers ever get pushed as the image
+  # itself). mode=max on --cache-to is what makes the builder stage's
+  # `pnpm install`/`pnpm build` layers reusable across builds; without it
+  # only the trivial final-stage COPY steps would ever cache-hit.
+  #
+  # Requires Artifact Registry, not GCR — GCR doesn't support the cache
+  # manifest format buildx writes.
+  - name: gcr.io/cloud-builders/docker
+    id: Build and Push Image
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        set -euo pipefail
+        docker buildx create --name cloudbuilder --driver docker-container --use
+
+        IMAGE="$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/$_IMAGE_NAME"
+        CACHE="$IMAGE:buildcache"
+
+        docker buildx build \
+          --tag "$IMAGE:${SHORT_SHA}" \
+          --cache-from "type=registry,ref=$CACHE" \
+          --cache-to "type=registry,ref=$CACHE,mode=max" \
+          --build-arg VITE_BUCKET_ENDPOINT="$_VITE_BUCKET_ENDPOINT" \
+          --build-arg VITE_GTM_ID="$_VITE_GTM_ID" \
+          --push \
+          .
+
+  # Deploy the freshly built, commit-tagged image to Cloud Run.
+  - name: gcr.io/cloud-builders/gcloud
+    id: Deploy Image
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        set -euo pipefail
+        IMAGE="$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/$_IMAGE_NAME"
+
+        IFS=',' read -r -a cloud_runs <<< "$_CLOUD_RUN_SERVICE_NAMES"
+        for cr in "${cloud_runs[@]}"; do
+          gcloud run deploy "$cr" \
+            --image "$IMAGE:${SHORT_SHA}" \
+            --region "$_REGION"
+        done
+
+  # Only now, after a successful deploy, point :latest at this build. Pure
+  # tag move via Artifact Registry — no re-upload of image bytes.
+  - name: gcr.io/cloud-builders/gcloud
+    id: Promote Latest Tag
+    args:
+      - artifacts
+      - docker
+      - tags
+      - add
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/$_IMAGE_NAME:${SHORT_SHA}'
+      - '$_REGION-docker.pkg.dev/$PROJECT_ID/$_REPO/$_IMAGE_NAME:latest'
+
+timeout: 1800s
+
+substitutions:
+  _REGION: asia-east1
+  _REPO: '' # Artifact Registry repository name (docker format)
+  _IMAGE_NAME: '' # default value
+  _CLOUD_RUN_SERVICE_NAMES: '' # comma-separated, default value
+  _VITE_BUCKET_ENDPOINT: '' # default value
+  _VITE_GTM_ID: '' # default value
